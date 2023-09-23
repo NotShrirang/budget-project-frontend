@@ -1,69 +1,562 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import url("https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap");
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+*,
+*::before,
+*::after {
+  box-sizing: border-box !important;
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  padding: 0;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@layer components {
+  .navContainer {
+    background: #fff;
+    box-shadow: 0px 3.57397px 40.20715px 0px rgba(0, 0, 0, 0.08);
+    transition: 250ms ease-in-out;
   }
-  a:hover {
-    color: #747bff;
+
+  .navContainerDark {
+    background: #1e252b;
+    box-shadow: 0px 3.57397px 40.20715px 0px rgba(0, 0, 0, 0.08);
   }
-  button {
-    background-color: #f9f9f9;
+
+  .logoText {
+    color: #080808;
+    font-family: Epilogue;
+    font-size: 24.062px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 25.108px;
+    letter-spacing: 0.12px;
+  }
+
+  .logoTextDark {
+    color: #e9f5fe;
+    font-family: Epilogue;
+    font-size: 24.062px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 25.108px;
+    letter-spacing: 0.12px;
+  }
+
+  .navItem svg {
+    font-size: 2rem;
+  }
+
+  .navItem {
+    color: #080808;
+    font-family: Poppins;
+    font-size: 16.738px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 25.108px;
+    letter-spacing: 0.167px;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    border-radius: 4px;
+    cursor: pointer;
+
+    margin-bottom: 0.5rem;
+  }
+
+  .navItem:hover {
+    background: #e9f5fe;
+    color: #0c7fda;
+    font-weight: 600;
+  }
+
+  .navItemDark svg {
+    font-size: 2rem;
+  }
+
+  .navItemDark {
+    color: #e9f5fe;
+    font-family: Poppins;
+    font-size: 16.738px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 25.108px;
+    letter-spacing: 0.167px;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    border-radius: 4px;
+    cursor: pointer;
+
+    margin-bottom: 0.5rem;
+  }
+
+  .navItemDark:hover {
+    background: #e9f5fe;
+    color: #0c7fda;
+    font-weight: 600;
+  }
+
+  .navItemActive svg {
+    font-size: 2rem;
+  }
+
+  .navItemActive {
+    background: #e9f5fe;
+    color: #0c7fda;
+    font-weight: 600;
+
+    font-family: Poppins;
+    font-size: 16.738px;
+    font-style: normal;
+    line-height: 25.108px;
+    letter-spacing: 0.167px;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    border-radius: 4px;
+    cursor: pointer;
+
+    margin-bottom: 0.5rem;
+  }
+
+  .darkModeContainer svg {
+    font-size: 2rem;
+  }
+
+  .darkModeContainer {
+    color: #080808;
+    font-family: Poppins;
+    font-size: 16.738px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 25.108px;
+    letter-spacing: 0.167px;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    border-radius: 4px;
+    cursor: pointer;
+
+    margin-bottom: 0.5rem;
+  }
+
+  .darkModeContainerDark svg {
+    font-size: 2rem;
+  }
+
+  .darkModeContainerDark {
+    color: #e9f5fe;
+    font-family: Poppins;
+    font-size: 16.738px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 25.108px;
+    letter-spacing: 0.167px;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    border-radius: 4px;
+    cursor: pointer;
+
+    margin-bottom: 0.5rem;
+  }
+
+  .logoutContainer svg {
+    font-size: 2rem;
+  }
+
+  .logoutContainer {
+    color: #ffffff;
+    background: #080808;
+    font-family: Poppins;
+    font-size: 16.738px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 25.108px;
+    letter-spacing: 0.167px;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    border-radius: 4px;
+    cursor: pointer;
+
+    margin-bottom: 0.5rem;
+    padding: 4px;
+  }
+
+  .logoutContainer:hover {
+    background: #e9f5fe;
+    color: #0c7fda;
+    font-weight: 600;
+  }
+
+  .logoutContainerDark svg {
+    font-size: 2rem;
+  }
+
+  .logoutContainerDark {
+    color: #080808;
+    background: #ffffff;
+    font-family: Poppins;
+    font-size: 16.738px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 25.108px;
+    letter-spacing: 0.167px;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    border-radius: 4px;
+    cursor: pointer;
+
+    margin-bottom: 0.5rem;
+    padding: 4px;
+  }
+
+  .logoutContainerDark:hover {
+    background: #e9f5fe;
+    color: #0c7fda;
+    font-weight: 600;
+  }
+
+  .headerContainer {
+    background: #fff;
+  }
+
+  .headerContainerDark {
+    background: #1e252b;
+  }
+
+  .mainContainer {
+    background-color: #fafafa;
+  }
+
+  .mainContainerDark {
+    background-color: #080808;
+  }
+
+  .headerText {
+    color: #000;
+    font-family: Epilogue;
+    /* font-size: 65px; */
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -1.3px;
+  }
+
+  .headerTextDark {
+    color: #e9f5fe;
+    font-family: Epilogue;
+    /* font-size: 65px; */
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -1.3px;
+  }
+
+  .headerTextSmallDark {
+    color: #e9f5fe;
+    font-family: Epilogue;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -1.3px;
+  }
+
+  .primaryText {
+    color: #000;
+    font-family: Epilogue;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -1.3px;
+  }
+
+  .primaryTextDark {
+    color: #e9f5fe;
+    font-family: Epilogue;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -1.3px;
+  }
+
+  .rainbowText {
+    position: relative;
+    color: transparent;
+    background-image: linear-gradient(90deg, #DA0C0C, #FF6161);
+    background-size: 200% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: wavy 8s linear infinite alternate;
+    white-space: nowrap;
+  }
+
+  @keyframes wavy {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  .primaryButton {
+    color: #fff;
+    font-family: Epilogue;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.7px;
+
+    border: black 2px solid;
+    border-radius: 20px;
+    background: #080808;
+    transition: all 150ms ease-in-out;
+  }
+
+  .primaryButton:hover {
+    color: #080808;
+    font-family: Epilogue;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.7px;
+
+    border-radius: 20px;
+    background: #fff;
+    border: 2px solid black;
+  }
+
+  .primaryButtonDark {
+    color: #080808;
+    font-family: Epilogue;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.7px;
+
+    border-radius: 20px;
+    background: #fff;
+    transition: all 150ms ease-in-out;
+  }
+
+  .primaryButtonDark:hover {
+    color: #fff;
+    font-family: Epilogue;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.7px;
+
+    border-radius: 20px;
+    background: #080808;
+    /* border: 2px solid white; */
+  }
+
+  .gradCircle {
+    width: 330px;
+    height: 330px;
+    flex-shrink: 0;
+    border-radius: 550px;
+    background: linear-gradient(
+      180deg,
+      #DA0C0C 0%,
+      #FF6161 100%
+    );
+    position: absolute;
+    filter: blur(100px);
+  }
+
+  /* Register user */
+  .inputLight {
+    display: flex;
+    flex-direction: column;
+    width: 25rem;
+
+    color: #000;
+    font-family: Epilogue;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.72px;
+
+    margin-bottom: 1rem;
+  }
+
+  .inputLight input {
+    width: 100%;
+
+    padding: 0.5rem 1rem;
+
+    outline: none;
+    border-radius: 10px;
+    border: 2px solid #DA0C0C;
+    background: transparent;
+  }
+  .inputLight label {
+    margin-bottom: 0.5rem;
+  }
+
+  .inputDark {
+    display: flex;
+    flex-direction: column;
+    width: 25rem;
+
+    color: #fff;
+    font-family: Epilogue;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.72px;
+
+    margin-bottom: 1rem;
+  }
+
+  .inputDark input {
+    width: 100%;
+
+    padding: 0.5rem 1rem;
+
+    outline: none;
+    border-radius: 10px;
+    border: 2px solid #2196f3;
+    background: transparent;
+  }
+
+  .inputDark label {
+    margin-bottom: 0.5rem;
+  }
+
+  /* inference */
+  .secondaryContainer {
+    background-color: #fafafa;
+    box-shadow: 20px 20px 34px gray;
+  }
+  .secondaryContainerDark {
+    background-color: #080808;
+    box-shadow: 20px 20px 34px #0c4cda;
+  }
+
+  .descriptionText {
+    color: #000;
+    font-family: Epilogue;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -1.3px;
+
+    /* color: #E9F5FE;
+    font-family: Epilogue;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 35px; /* 116.667% */
+    /* letter-spacing: -0.6px;  */
+  }
+
+  .descriptionTextDark {
+    color: #e9f5fe;
+    font-family: Epilogue;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -1.3px;
+  }
+
+  /* doctors */
+  .rainbowContainer {
+    border-radius: 20px;
+    background: linear-gradient(
+      115deg,
+      #DA0C0C 34.31%,
+      #FF6161 71.24%
+    );
+  }
+
+  .plainContainer {
+    background-color: #d9d9d9;
+  }
+
+  .plainContainerDark {
+    background-color: #5a5a5a;
+  }
+
+  .bareButton {
+    color: #fff;
+    font-family: Epilogue;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.7px;
+
+    border-radius: 20px;
+    background: #080808;
+    transition: all 150ms ease-in-out;
+  }
+
+  .bareButton:hover {
+    color: #080808;
+    font-family: Epilogue;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.7px;
+
+    border-radius: 20px;
+    background: #fff;
+    border: 2px solid black;
+  }
+
+  .bareButtonDark {
+    color: #080808;
+    font-family: Epilogue;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.7px;
+
+    border-radius: 20px;
+    background: #fff;
+    transition: all 150ms ease-in-out;
+  }
+
+  .bareButtonDark:hover {
+    color: #fff;
+    font-family: Epilogue;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.7px;
+
+    border-radius: 20px;
+    background: #080808;
+    border: 2px solid white;
   }
 }

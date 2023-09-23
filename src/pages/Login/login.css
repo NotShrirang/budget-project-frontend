@@ -1,0 +1,84 @@
+.login-page {
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+    height: 90vh;
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+    color: #6870fa;
+  }
+  
+  input[type="text"],
+  input[type="password"] {
+    height: 35px;
+    border: none;
+    padding: 0 10px;
+    font-size: 16px;
+    height: 3rem;
+    width: 15rem;
+    outline: none;
+    background-color: black;
+    color: white;
+    border-bottom: white 1px solid;
+  }
+  input:hover {
+    border-bottom: #6870fa 1px solid;
+  }
+  input:focus {
+    border-bottom: #6870fa 1px solid;
+  }
+  input:focus::placeholder {
+    color: transparent;
+  }
+  
+  input[type="submit"] {
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    background: #6870fa;
+    border: 1px solid #6870fa;
+    color: #fff3f3;
+    padding: 10px 20px;
+    width: 15rem;
+  }
+  
+  input[type="submit"]:hover {
+    background: white;
+    color: #6870fa;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .login-form {
+    background-color: rgb(0, 0, 0);
+    padding: 5rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  .list-container {
+    display: flex;
+  }
+  
+  .error {
+    color: red;
+    font-size: 12px;
+  }
+  
+  .title {
+    font-size: 38px;
+    margin-bottom: 10px;
+  }
+  
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 25px;
+  }
