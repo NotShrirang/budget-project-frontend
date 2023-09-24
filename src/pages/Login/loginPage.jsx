@@ -39,42 +39,53 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch(Config.requestToken, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    });
-
-    const data = await response.json();
-    // console.log(data);
-    if (data.access) {
-      var decoded = jwtDecode(data.access);
-      const userId = decoded.user_id;
-      localStorage.setItem("refreshToken", data.refresh);
-      localStorage.setItem("accessToken", data.access);
-      localStorage.setItem("userId", userId);
-      navigate("/dashboard");
-      toast.success("Login Successful", {
-        position: "top-right",
-        autoClose: 2000,
-        closeOnClick: true,
-        pauseOnHover: true,
+    try {
+      const response = await fetch(Config.requestToken, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
       });
-    } else if (
-      data.detail === "No active account found with the given credentials"
-    ) {
-      toast.error("Invalid Credentials", {
+
+      const data = await response.json();
+      console.log(data);
+      if (data.access) {
+        var decoded = jwtDecode(data.access);
+        const userId = decoded.user_id;
+        localStorage.setItem("refreshToken", data.refresh);
+        localStorage.setItem("accessToken", data.access);
+        localStorage.setItem("userId", userId);
+        navigate("/dashboard");
+        toast.success("Login Successful", {
+          position: "top-right",
+          autoClose: 2000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+      } else if (
+        data.detail === "No active account found with the given credentials"
+      ) {
+        toast.error("Invalid Credentials", {
+          position: "top-right",
+          autoClose: 2000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong...", {
         position: "top-right",
         autoClose: 2000,
         closeOnClick: true,
         pauseOnHover: true,
       });
     }
+    clearState();
   };
 
   return (

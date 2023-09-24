@@ -1,24 +1,47 @@
 import React from "react";
-import DashboardCard from "../../components/Card/DashboardCard";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Config from "../../utils/config";
 import { Box } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import styles from "./Dashboard.module.css";
+import axios from "axios";
 import { toast } from "react-toastify";
+import DashboardCard from "../../components/Card/DashboardCard";
+import Config from "../../utils/config";
 import formatDate from "../../utils/formatDate";
+
+import styles from "./Dashboard.module.css";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [requests, setRequests] = useState([]);
   const [requestCount, setRequestCount] = useState({});
+  const [user, setUser] = useState({});
+
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem("userId");
     if (!accessToken) {
       navigate("/login");
     }
+    axios
+      .get(Config.getUser + `/${userId}/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 2000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+      });
+
     axios
       .get(Config.getRequests, {
         headers: {
@@ -26,7 +49,7 @@ const Dashboard = () => {
         },
       })
       .then((res) => {
-        setRequests(res.data);
+        setRequests(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -58,6 +81,10 @@ const Dashboard = () => {
         });
       });
   }, []);
+
+  const handleRowDoubleClick = (e) => {
+    navigate(`/transaction/${e.row.id}/`);
+  };
 
   const columns = [
     {
@@ -125,15 +152,15 @@ const Dashboard = () => {
   return (
     <>
       <div
-        className="flex flex-col h-[91vh] mainContainer light:mainContainerLight justify-center items-end 
-                    relative overflow-hidden p-[2rem]"
+        className="flex flex-col h-[91vh] mainContainer light:mainContainerLight
+                    relative p-[2rem] "
       >
-        <div className="flex flex-col min-w-[100%]">
+        <div className="flex flex-col">
+          <div className="titleBlack">Transactions</div>
           <div
             style={{
               display: "flex",
               flexDirection: "row",
-              minWidth: "100%",
               justifyContent: "space-evenly",
               transition: "all 0.5s ease",
             }}
@@ -157,6 +184,7 @@ const Dashboard = () => {
               sx={{
                 border: "2px solid #000",
                 borderRadius: "1.25rem",
+                width: "100%",
                 height: "100%",
                 "& .MuiDataGrid-root": {
                   border: "black",
@@ -195,13 +223,13 @@ const Dashboard = () => {
                 rows={requests}
                 columns={columns}
                 slots={{ Toolbar: GridToolbar }}
-                onRowDoubleClick={() => {}}
+                onRowDoubleClick={handleRowDoubleClick}
                 sx={{ borderRadius: "1.25rem", cursor: "pointer" }}
               />
             </Box>
           </div>
         </div>
-        <div className="gradCircle -right-[20rem]"></div>
+        <div className="gradCircle -right-[0rem] -top-[20rem]"></div>
       </div>
     </>
   );

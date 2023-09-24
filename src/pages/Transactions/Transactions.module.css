@@ -1,0 +1,33 @@
+.hr {
+    background: linear-gradient(to right, #ff0000, transparent);
+    height: 3px;
+    margin-right: 1rem;
+    margin-left: 1rem;
+}
+
+.pending {
+    color: #b69800;
+    text-align: center;
+    font-family: Epilogue;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.approved {
+    color: #017f0d;
+    text-align: center;
+    font-family: Epilogue;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.rejected {
+    color: #ff0000;
+    text-align: center;
+    font-family: Epilogue;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}

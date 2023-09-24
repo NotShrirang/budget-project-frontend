@@ -15,7 +15,7 @@
     flex-direction: column;
     justify-content: center;
     background: linear-gradient(to bottom, #fff, #fff);
-    /* box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1); */
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
     border-radius: 1.25rem;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
@@ -23,11 +23,13 @@
     color: #000;
     text-align: center;
     font-family: Epilogue;
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
     letter-spacing: -0.025rem;
+    z-index: 10;
+    width: 30%;
 }
 
 
@@ -36,7 +38,7 @@
     color: #000;
     text-align: center;
     font-family: Epilogue;
-    font-size: 1.875rem;
+    font-size: 1.2rem;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
@@ -53,7 +55,7 @@
     color: #000;
     text-align: center;
     font-family: Epilogue;
-    font-size: 3.125rem;
+    font-size: 2rem;
     font-style: normal;
     font-weight: 600;
     line-height: normal;

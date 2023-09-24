@@ -14,6 +14,17 @@
 
 @layer components {
 
+  .titleBlack {
+    color: #080808;
+    font-family: Epilogue;
+    font-size: 3rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.6px;
+    margin-left: 1rem;
+  }
+
   .titleRed {
     color: #DA0C0C;
     font-family: Epilogue;
@@ -79,8 +90,8 @@
   }
 
   .navItem:hover {
-    background: #e9f5fe;
-    color: #0c7fda;
+    background: #ffe0e0;
+    color: #DA0C0C;
     font-weight: 600;
   }
 
@@ -89,7 +100,7 @@
   }
 
   .navItemDark {
-    color: #e9f5fe;
+    color: #ffe0e0;
     font-family: Poppins;
     font-size: 16.738px;
     font-style: normal;
@@ -108,8 +119,8 @@
   }
 
   .navItemDark:hover {
-    background: #e9f5fe;
-    color: #0c7fda;
+    background: #ffe0e0;
+    color: #DA0C0C;
     font-weight: 600;
   }
 
@@ -118,8 +129,8 @@
   }
 
   .navItemActive {
-    background: #e9f5fe;
-    color: #0c7fda;
+    background: #ffe0e0;
+    color: #DA0C0C;
     font-weight: 600;
 
     font-family: Poppins;
@@ -166,7 +177,7 @@
   }
 
   .darkModeContainerDark {
-    color: #e9f5fe;
+    color: #ffe0e0;
     font-family: Poppins;
     font-size: 16.738px;
     font-style: normal;
@@ -210,8 +221,8 @@
   }
 
   .logoutContainer:hover {
-    background: #e9f5fe;
-    color: #0c7fda;
+    background: #ffe0e0;
+    color: #DA0C0C;
     font-weight: 600;
   }
 
@@ -241,8 +252,8 @@
   }
 
   .logoutContainerDark:hover {
-    background: #e9f5fe;
-    color: #0c7fda;
+    background: #ffe0e0;
+    color: #DA0C0C;
     font-weight: 600;
   }
 

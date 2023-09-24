@@ -4,6 +4,8 @@ import Home from "./pages/Home/HomePage";
 import Login from "./pages/Login/LoginPage";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
+import Activity from "./pages/Activity/Activity";
+import TransactionView from "./pages/Transactions/Transactions";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,14 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <Dashboard />,
+      },
+      {
+        path: "transaction/:id/",
+        element: <TransactionView />,
+      },
+      {
+        path: "activities",
+        element: <Activity />,
       },
     ],
   },

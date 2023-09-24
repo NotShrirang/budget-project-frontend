@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import dermaLogo from "../../assets/logo.webp";
-import HomeIcon from "@mui/icons-material/Home";
-import NoteAltIcon from "@mui/icons-material/NoteAlt";
-import DescriptionIcon from "@mui/icons-material/Description";
-import GroupsIcon from "@mui/icons-material/Groups";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import LogoutIcon from "@mui/icons-material/Logout";
+import { Outlet, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
-import { Avatar } from "flowbite-react";
-import defaultPfp from "../../assets/defaultPfp.jpg";
+import axios from "axios";
+import Config from "../../utils/config";
+import mmcoeLogo from "../../assets/logo.webp";
+import styles from "./MainLayout.module.css";
+import NoteAltIcon from "@mui/icons-material/NoteAlt";
+import RowingIcon from "@mui/icons-material/Rowing";
 import TextsmsIcon from "@mui/icons-material/Textsms";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const MainLayout = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [user, setUser] = useState({});
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const navigate = useNavigate();
 
@@ -29,24 +28,45 @@ const MainLayout = () => {
 
   useEffect(() => {
     checkUser();
+    const accessToken = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem("userId");
+    axios
+      .get(Config.getUser + `/${userId}/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 2000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+      });
   }, []);
 
   const toggleMenu = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const logOut = () => {
-    localStorage.removeItem("userId");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    setUserLoggedIn(false);
-    navigate("/login");
-    toast.info("Logged out successfully", {
-      position: "top-right",
-      autoClose: 2000,
-      closeOnClick: true,
-      pauseOnHover: true,
-    });
+  const handleLogout = () => {
+    // Are you sure?
+    const confirm = window.confirm("Are you sure you want to logout?");
+    if (confirm) {
+      localStorage.removeItem("userId");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      setUserLoggedIn(false);
+      navigate("/login");
+      toast.success("Logged out successfully");
+    } else {
+      return false;
+    }
   };
 
   return (
@@ -66,65 +86,46 @@ const MainLayout = () => {
                 <div>
                   <div className="flex items-center gap-4">
                     <img
-                      src={dermaLogo}
+                      src={mmcoeLogo}
                       alt="logo"
-                      className="bg-[#FF0000] w-[40px] h-[40px] p-[4px]"
+                      className="bg-[#ff0000] w-[40px] h-[40px] p-[4px]"
                     />
                     <div className="logoText light:logoTextLight">MMCOE</div>
                   </div>
-
                   {/* Nav Items */}
                   <NavLink
-                    to={`/`}
+                    to={`/dashboard`}
                     className={({ isActive }) =>
                       isActive
                         ? "navItemActive ml-[0.5rem] mt-[3rem]"
                         : "navItem light:navItemLight ml-[0.5rem] mt-[3rem]"
                     }
                   >
-                    <HomeIcon />
-                    <div>Home</div>
-                  </NavLink>
-                  <NavLink
-                    to={`/inference`}
-                    className={({ isActive }) =>
-                      isActive
-                        ? "navItemActive ml-[0.5rem]"
-                        : "navItem light:navItemLight ml-[0.5rem]"
-                    }
-                  >
                     <NoteAltIcon />
-                    <div>DermacareAI</div>
+                    <div>Requests</div>
                   </NavLink>
-                  <NavLink
-                    to={`/records`}
-                    className={({ isActive }) =>
-                      isActive
-                        ? "navItemActive ml-[0.5rem]"
-                        : "navItem light:navItemLight ml-[0.5rem]"
-                    }
-                  >
-                    <DescriptionIcon />
-                    <div>Records</div>
-                  </NavLink>
-                  <NavLink
-                    to={`/doctors`}
-                    className={({ isActive }) =>
-                      isActive
-                        ? "navItemActive ml-[0.5rem] p-[2px]"
-                        : "navItem light:navItemLight ml-[0.5rem] p-[2px]"
-                    }
-                  >
-                    <GroupsIcon />
-                    <div>Doctors</div>
-                  </NavLink>
+                  {(user.privilege === 2 ||
+                    user.privilege === 1 ||
+                    user.privilege === 0) && (
+                    <NavLink
+                      to={`/activities`}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "navItemActive ml-[0.5rem]"
+                          : "navItem light:navItemLight ml-[0.5rem]"
+                      }
+                    >
+                      <RowingIcon />
+                      <div>Activities</div>
+                    </NavLink>
+                  )}
                 </div>
 
                 {/* Nav Footer */}
                 <div>
                   <div
                     className="logoutContainer light:logoutContainerLight"
-                    onClick={logOut}
+                    onClick={handleLogout}
                   >
                     <LogoutIcon />
                     <div>Logout</div>
@@ -136,60 +137,44 @@ const MainLayout = () => {
                 <div>
                   <div>
                     <img
-                      src={dermaLogo}
+                      src={mmcoeLogo}
                       alt="logo"
-                      className="bg-[#FF0000] w-[40px] h-[40px] p-[4px]"
+                      className="bg-[#ff0000] w-[40px] h-[40px] p-[4px]"
                     />
                   </div>
 
                   {/* Nav Items */}
                   <NavLink
-                    to={`/`}
+                    to={`/dashboard`}
                     className={({ isActive }) =>
                       isActive
                         ? "navItemActive w-fit mt-[3rem]"
                         : "navItem light:navItemLight mt-[3rem]"
                     }
                   >
-                    <HomeIcon />
-                  </NavLink>
-                  <NavLink
-                    to={`/inference`}
-                    className={({ isActive }) =>
-                      isActive
-                        ? "navItemActive w-fit"
-                        : "navItem light:navItemLight"
-                    }
-                  >
                     <NoteAltIcon />
                   </NavLink>
-                  <NavLink
-                    to={`/records`}
-                    className={({ isActive }) =>
-                      isActive
-                        ? "navItemActive w-fit"
-                        : "navItem light:navItemLight"
-                    }
-                  >
-                    <DescriptionIcon />
-                  </NavLink>
-                  <NavLink
-                    to={`/doctors`}
-                    className={({ isActive }) =>
-                      isActive
-                        ? "navItemActive w-fit p-[2px]"
-                        : "navItem light:navItemLight p-[2px]"
-                    }
-                  >
-                    <GroupsIcon />
-                  </NavLink>
+                  {(user.privilege === 2 ||
+                    user.privilege === 1 ||
+                    user.privilege === 0) && (
+                    <NavLink
+                      to={`/activities`}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "navItemActive w-fit"
+                          : "navItem light:navItemLight"
+                      }
+                    >
+                      <RowingIcon />
+                    </NavLink>
+                  )}
                 </div>
 
                 {/* Nav Footer */}
                 <div>
                   <div
                     className="logoutContainer light:logoutContainerLight"
-                    onClick={logOut}
+                    onClick={handleLogout}
                   >
                     <LogoutIcon />
                   </div>
@@ -204,8 +189,9 @@ const MainLayout = () => {
           {/* Header */}
           <div className="h-[4rem] flex">
             <div className="fixed h-[4rem] w-[100%] pr-[80px] headerContainer light:headerContainerLight py-[1rem] flex justify-end gap-[1rem] items-center z-30">
+              <div className={styles.welcomeEmail}>Welcome {user.email}!</div>
               <TextsmsIcon
-                className="text-[#FF0000] cursor-pointer"
+                className="text-[#000000] cursor-pointer mr-[1rem]"
                 style={{ fontSize: "2rem" }}
               />
             </div>
