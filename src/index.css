@@ -13,6 +13,17 @@
 }
 
 @layer components {
+
+  .titleRed {
+    color: #DA0C0C;
+    font-family: Epilogue;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.6px;
+  }
+
   .navContainer {
     background: #fff;
     box-shadow: 0px 3.57397px 40.20715px 0px rgba(0, 0, 0, 0.08);
@@ -378,18 +389,36 @@
     /* border: 2px solid white; */
   }
 
+  @keyframes slideInFromLeft {
+    0% {
+      filter: blur(600px);
+      width: 600px;
+      height: 600px;
+    }
+    100% {
+      filter: blur(150px);
+      width: 400px;
+      height: 400px;
+    }
+  }
+
   .gradCircle {
-    width: 330px;
-    height: 330px;
+    width: 400px;
+    height: 400px;
     flex-shrink: 0;
-    border-radius: 550px;
+    border-radius: 850px;
     background: linear-gradient(
       180deg,
       #DA0C0C 0%,
       #FF6161 100%
     );
     position: absolute;
-    filter: blur(100px);
+    filter: blur(150px);
+    transition: all 400ms ease-in-out;
+    animation: slideInFromLeft 1s ease-in-out;
+  }
+  .gradCircle:hover {
+    filter: blur(300px);
   }
 
   /* Register user */
@@ -446,7 +475,7 @@
 
     outline: none;
     border-radius: 10px;
-    border: 2px solid #2196f3;
+    border: 2px solid #FF6161;
     background: transparent;
   }
 
@@ -461,7 +490,7 @@
   }
   .secondaryContainerDark {
     background-color: #080808;
-    box-shadow: 20px 20px 34px #0c4cda;
+    box-shadow: 20px 20px 34px #DA0C0C;
   }
 
   .descriptionText {

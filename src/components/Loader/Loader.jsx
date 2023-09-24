@@ -11,7 +11,7 @@ const override = {
 function Loader({ loading }) {
   return (
     <BeatLoader
-      color="#366CBD"
+      color="#DA0C0C"
       margin="8px"
       cssOverride={override}
       loading={true}

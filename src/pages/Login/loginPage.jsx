@@ -1,11 +1,12 @@
 import { useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
-import { baseURL } from "../../utils/config";
+import Config from "../../utils/config";
 import jwtDecode from "jwt-decode";
-import GradientCircle from "../../components/GradientCircle/GradientCircle";
+import { useEffect } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,15 +14,22 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const initialState = {
-    username: "",
+    email: "",
     password: "",
   };
 
-  const [{ username, password }, setState] = useState(initialState);
+  const [{ email, password }, setState] = useState(initialState);
 
   const clearState = () => {
     setState({ ...initialState });
   };
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      navigate("/dashboard");
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,57 +39,67 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const url = `${baseURL}/login`;
-
-    const response = await fetch(url, {
+    const response = await fetch(Config.requestToken, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: username,
+        email: email,
         password: password,
       }),
     });
 
-    console.log(response);
     const data = await response.json();
-    if (response.status === 205 || response.status === 204 || data.isSuccess) {
+    // console.log(data);
+    if (data.access) {
       var decoded = jwtDecode(data.access);
       const userId = decoded.user_id;
       localStorage.setItem("refreshToken", data.refresh);
       localStorage.setItem("accessToken", data.access);
       localStorage.setItem("userId", userId);
+      navigate("/dashboard");
+      toast.success("Login Successful", {
+        position: "top-right",
+        autoClose: 2000,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
+    } else if (
+      data.detail === "No active account found with the given credentials"
+    ) {
+      toast.error("Invalid Credentials", {
+        position: "top-right",
+        autoClose: 2000,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
     }
   };
-
-  if (loading) {
-    return <Loader loading={loading} />;
-  }
 
   return (
     <>
       <div className="flex flex-col items-center h-[100%] w-[100%] mainContainer min-h-[100vh] light:mainContainerLight relative overflow-hidden">
         <div className="w-[30rem]  z-10 flex flex-col items-center mt-[10rem]">
-          <div className="text-3xl text-gradient-red text-bold">Login</div>
+          <div className="titleRed">Login</div>
           <form
             onSubmit={(e) => handleSubmit(e)}
             className="flex flex-col items-center mt-[2rem]"
           >
             <div className="inputLight light:inputLight">
-              <label>Username</label>
+              <label>Email</label>
               <input
                 type="text"
-                name="username"
-                value={username}
+                name="email"
+                value={email}
                 onChange={handleChange}
-                placeholder="Enter your username"
+                placeholder="Enter your email"
               />
             </div>
             <div className="inputLight light:inputLight">
               <label>Password</label>
               <input
-                type="text"
+                type="password"
                 name="password"
                 value={password}
                 onChange={handleChange}

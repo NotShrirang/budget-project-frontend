@@ -1,0 +1,30 @@
+.datagridCell {
+    color: #000;
+    text-align: center;
+    font-family: Epilogue;
+    font-size: 1rem;
+}
+
+.pending {
+    color: #b69800;
+    text-align: center;
+    font-family: Epilogue;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.approved {
+    color: #017f0d;
+    text-align: center;
+    font-family: Epilogue;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.rejected {
+    color: #ff0000;
+    text-align: center;
+    font-family: Epilogue;
+    font-size: 1rem;
+    font-weight: 600;
+}
