@@ -463,6 +463,28 @@
     margin-bottom: 0.5rem;
   }
 
+  .inputLight select {
+    width: 100%;
+
+    padding: 0.5rem 1rem;
+
+    outline: none;
+    border-radius: 10px;
+    border: 2px solid #DA0C0C;
+    background: transparent;
+  }
+
+  .inputLight option {
+    width: 100%;
+
+    padding: 0.5rem 1rem;
+
+    outline: none;
+    border-radius: 10px;
+    background: transparent;
+  }
+
+
   .inputDark {
     display: flex;
     flex-direction: column;

@@ -68,7 +68,7 @@ const Dashboard = () => {
         },
       })
       .then((res) => {
-        // console.log(res);
+        // console.log(res.data.data);
         setRequestCount(res.data.data);
       })
       .catch((err) => {
@@ -163,6 +163,8 @@ const Dashboard = () => {
               flexDirection: "row",
               justifyContent: "space-evenly",
               transition: "all 0.5s ease",
+              height: "25vh",
+              marginTop: "2rem",
             }}
           >
             <DashboardCard

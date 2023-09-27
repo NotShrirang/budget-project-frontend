@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import Activity from "./pages/Activity/Activity";
 import TransactionView from "./pages/Transactions/Transactions";
+import ActivityView from "./pages/Activity/ActivityView";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: "activities",
         element: <Activity />,
+      },
+      {
+        path: "activities/:id/",
+        element: <ActivityView />,
       },
     ],
   },
