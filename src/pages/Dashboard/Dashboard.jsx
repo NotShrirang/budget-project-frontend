@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -10,6 +10,7 @@ import Config from "../../utils/config";
 import formatDate from "../../utils/formatDate";
 
 import styles from "./Dashboard.module.css";
+import { Add } from "@mui/icons-material";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -83,7 +84,15 @@ const Dashboard = () => {
   }, []);
 
   const handleRowDoubleClick = (e) => {
-    navigate(`/transaction/${e.row.id}/`);
+    navigate(`/transactions/${e.row.id}/`);
+  };
+
+  const handleEmailClick = (e) => {
+    window.open(`mailto:${e.target.innerText}`);
+  };
+
+  const handleAddButtonClick = () => {
+    navigate("/transactions/add");
   };
 
   const columns = [
@@ -98,12 +107,23 @@ const Dashboard = () => {
     {
       field: "request_date",
       headerName: "Request Date",
-      flex: 1,
       renderCell: (params) => {
         return (
           <div className={styles.datagridCell}>
             {formatDate(params.value)[0]}
           </div>
+        );
+      },
+    },
+    {
+      field: "userEmail",
+      headerName: "User Email",
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <button className={styles.button} onClick={handleEmailClick}>
+            {params.value}
+          </button>
         );
       },
     },
@@ -149,14 +169,46 @@ const Dashboard = () => {
     },
   ];
 
+  if (user.privilege === 0 || user.privilege === 1) {
+    columns.push({
+      field: "departmentName",
+      headerName: "Department",
+      flex: 1,
+      editable: false,
+    });
+  }
+
   return (
     <>
       <div
-        className="flex flex-col h-[91vh] mainContainer light:mainContainerLight
-                    relative p-[2rem] "
+        className="flex flex-col w-[100%] h-[91vh] mainContainer light:mainContainerLight
+                    relative p-[2rem]"
       >
         <div className="flex flex-col">
-          <div className="titleBlack">Transactions</div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <div className="titleBlack">Transactions</div>
+            <div
+              className={styles.updateButton}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                alignItems: "center",
+                gap: "1rem",
+                zIndex: "10",
+              }}
+              onClick={handleAddButtonClick}
+            >
+              <Add />
+              <div>Add</div>
+            </div>
+          </div>
           <div
             style={{
               display: "flex",

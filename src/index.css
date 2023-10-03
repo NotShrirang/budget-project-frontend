@@ -446,10 +446,21 @@
     line-height: normal;
     letter-spacing: -0.72px;
 
-    margin-bottom: 1rem;
+    /* margin-bottom: 1rem; */
   }
 
   .inputLight input {
+    width: 100%;
+
+    padding: 0.5rem 1rem;
+
+    outline: none;
+    border-radius: 10px;
+    border: 2px solid #DA0C0C;
+    background: transparent;
+  }
+
+  .inputLight textarea {
     width: 100%;
 
     padding: 0.5rem 1rem;

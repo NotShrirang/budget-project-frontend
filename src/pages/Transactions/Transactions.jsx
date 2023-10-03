@@ -4,8 +4,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Config from "../../utils/config";
-import formatDate from "../../utils/formatDate";
-import "./Transactions.module.css";
 import styles from "./Transactions.module.css";
 import DescriptionIcon from "@mui/icons-material/Description";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
@@ -15,6 +13,7 @@ import StopCircleOutlinedIcon from "@mui/icons-material/StopCircleOutlined";
 const TransactionView = () => {
   const navigate = useNavigate();
   const [transaction, setTransaction] = useState({});
+  const [user, setUser] = useState({});
   const { id } = useParams();
 
   useEffect(() => {
@@ -23,6 +22,24 @@ const TransactionView = () => {
     if (!accessToken) {
       navigate("/login");
     }
+
+    axios
+      .get(Config.updateTransactionReadStatus + `${id}/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 2000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+      });
+
     axios
       .get(Config.getRequests + `${id}/`, {
         headers: {
@@ -41,7 +58,30 @@ const TransactionView = () => {
           pauseOnHover: true,
         });
       });
+
+    axios
+      .get(Config.getUser + `/${userId}/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 2000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+      });
   }, []);
+
+  const handleUpdateButtonClick = () => {
+    navigate(`/transactions/${id}/update/`);
+  };
 
   return (
     <div
@@ -49,7 +89,113 @@ const TransactionView = () => {
                     relative overflow-hidden p-[2rem]"
     >
       <div className="flex flex-col min-w-[100%]">
-        <div className="titleBlack">Transaction Details</div>
+        <div
+          style={{
+            display: "flex",
+            flex: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <div className="titleBlack">Transaction Details</div>
+          {user.privilege < 3 &&
+            (transaction.status == "requested" ||
+              transaction.status == "pending") && (
+              <div className="flex flex-row items-center">
+                <button
+                  className={styles.acceptedButton}
+                  onClick={() => {
+                    const confirm = window.confirm("Are you sure?");
+                    if (confirm) {
+                      axios
+                        .post(
+                          Config.updateTransactionStatus + `${id}/`,
+                          {
+                            status: "approved",
+                          },
+                          {
+                            headers: {
+                              Authorization: `Bearer ${localStorage.getItem(
+                                "accessToken"
+                              )}`,
+                            },
+                          }
+                        )
+                        .then((res) => {
+                          toast.success("Transaction Approved", {
+                            position: "top-right",
+                            autoClose: 2000,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                          });
+                          navigate("/dashboard");
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                          toast.error(err.message, {
+                            position: "top-right",
+                            autoClose: 2000,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                          });
+                        });
+                    }
+                  }}
+                >
+                  Accept
+                </button>
+                <button
+                  className={styles.rejectedButton}
+                  onClick={() => {
+                    const confirm = window.confirm("Are you sure?");
+                    if (confirm) {
+                      axios
+                        .post(
+                          Config.updateTransactionStatus + `${id}/`,
+                          {
+                            status: "rejected",
+                          },
+                          {
+                            headers: {
+                              Authorization: `Bearer ${localStorage.getItem(
+                                "accessToken"
+                              )}`,
+                            },
+                          }
+                        )
+                        .then((res) => {
+                          toast.success("Transaction Rejected", {
+                            position: "top-right",
+                            autoClose: 2000,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                          });
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                          toast.error(err.message, {
+                            position: "top-right",
+                            autoClose: 2000,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                          });
+                        });
+                    }
+                  }}
+                >
+                  Reject
+                </button>
+              </div>
+            )}
+          {!transaction.is_read && transaction.user == user.id && (
+            <button
+              className={styles.updateButton}
+              onClick={handleUpdateButtonClick}
+              disabled={transaction.is_read}
+            >
+              Update
+            </button>
+          )}
+        </div>
         <div className="flex flex-col mt-[1rem] bg-[#D9D9D9] z-10 min-h-[73vh]">
           <div
             style={{

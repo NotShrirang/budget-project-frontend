@@ -9,6 +9,7 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 
 const Activity = () => {
   const [activities, setActivities] = useState([]);
+  const [user, setUser] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,6 +18,27 @@ const Activity = () => {
     if (!accessToken) {
       navigate("/login");
     }
+    axios
+      .get(Config.getUser + `/${userId}/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        setUser(res.data);
+        if (res.data.privilege === 3) {
+          navigate("/dashboard");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 2000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+      });
     axios
       .get(Config.getActivities, {
         headers: {
@@ -58,6 +80,15 @@ const Activity = () => {
       editable: false,
     },
   ];
+
+  if (user.privilege === 0 || user.privilege === 1) {
+    columns.push({
+      field: "departmentName",
+      headerName: "Department",
+      flex: 1,
+      editable: false,
+    });
+  }
 
   const handleRowDoubleClick = (row) => {
     navigate(`/activities/${row.id}/`);

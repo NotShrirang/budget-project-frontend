@@ -38,9 +38,6 @@ const MainLayout = () => {
       })
       .then((res) => {
         setUser(res.data);
-        if (res.data.privilege === 3) {
-          navigate("/dashboard");
-        }
       })
       .catch((err) => {
         console.log(err);

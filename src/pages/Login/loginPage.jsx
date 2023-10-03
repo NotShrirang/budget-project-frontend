@@ -52,7 +52,7 @@ const Login = () => {
       });
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       if (data.access) {
         var decoded = jwtDecode(data.access);
         const userId = decoded.user_id;
@@ -95,7 +95,7 @@ const Login = () => {
           <div className="titleRed">Login</div>
           <form
             onSubmit={(e) => handleSubmit(e)}
-            className="flex flex-col items-center mt-[2rem]"
+            className="flex flex-col items-center mt-[2rem] gap-[1rem]"
           >
             <div className="inputLight light:inputLight">
               <label>Email</label>

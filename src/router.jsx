@@ -6,6 +6,8 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import Activity from "./pages/Activity/Activity";
 import TransactionView from "./pages/Transactions/Transactions";
+import TransactionAddForm from "./pages/Transactions/TransactionAddForm";
+import TransactionUpdateView from "./pages/Transactions/TransactionUpdatePage";
 import ActivityView from "./pages/Activity/ActivityView";
 
 const router = createBrowserRouter([
@@ -26,8 +28,16 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "transaction/:id/",
+        path: "transactions/add/",
+        element: <TransactionAddForm />,
+      },
+      {
+        path: "transactions/:id/",
         element: <TransactionView />,
+      },
+      {
+        path: "transactionS/:id/update/",
+        element: <TransactionUpdateView />,
       },
       {
         path: "activities",

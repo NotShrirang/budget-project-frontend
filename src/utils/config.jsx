@@ -8,6 +8,8 @@ class Config {
   static getRequestCount = `${Config.baseURL}/api/request-count/`;
   static getActivities = `${Config.baseURL}/api/activities/`;
   static getDepartments = `${Config.baseURL}/api/departments/`;
+  static updateTransactionStatus = `${Config.baseURL}/api/update-status-transactions/`;
+  static updateTransactionReadStatus = `${Config.baseURL}/api/update-read-status-transactions/`;
 }
 
 export default Config;
