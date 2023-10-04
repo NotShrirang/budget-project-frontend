@@ -10,6 +10,8 @@ import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import RowingIcon from "@mui/icons-material/Rowing";
 import TextsmsIcon from "@mui/icons-material/Textsms";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { Home } from "@mui/icons-material";
+import Swal from "sweetalert2";
 
 const MainLayout = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -56,17 +58,28 @@ const MainLayout = () => {
 
   const handleLogout = () => {
     // Are you sure?
-    const confirm = window.confirm("Are you sure you want to logout?");
-    if (confirm) {
-      localStorage.removeItem("userId");
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      setUserLoggedIn(false);
-      navigate("/login");
-      toast.success("Logged out successfully");
-    } else {
-      return false;
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#DA0C0C",
+      cancelButtonColor: "#000000",
+      focusCancel: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("userId");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        setUserLoggedIn(false);
+        navigate("/login");
+        toast.success("Logged out successfully");
+      } else {
+        return false;
+      }
+    });
   };
 
   return (
@@ -93,22 +106,37 @@ const MainLayout = () => {
                     <div className="logoText light:logoTextLight">MMCOE</div>
                   </div>
                   {/* Nav Items */}
+                  {(user.privilege === 2 ||
+                    user.privilege === 1 ||
+                    user.privilege === 0) && (
+                    <NavLink
+                      to={`/dashboard/`}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "navItemActive ml-[0.5rem] mt-[3rem]"
+                          : "navItem light:navItemLight ml-[0.5rem] mt-[3rem]"
+                      }
+                    >
+                      <Home />
+                      <div>Dashboard</div>
+                    </NavLink>
+                  )}
                   <NavLink
-                    to={`/dashboard`}
+                    to={`/transactions/`}
                     className={({ isActive }) =>
                       isActive
-                        ? "navItemActive ml-[0.5rem] mt-[3rem]"
-                        : "navItem light:navItemLight ml-[0.5rem] mt-[3rem]"
+                        ? "navItemActive ml-[0.5rem]"
+                        : "navItem light:navItemLight ml-[0.5rem]"
                     }
                   >
                     <NoteAltIcon />
-                    <div>Requests</div>
+                    <div>Transactions</div>
                   </NavLink>
                   {(user.privilege === 2 ||
                     user.privilege === 1 ||
                     user.privilege === 0) && (
                     <NavLink
-                      to={`/activities`}
+                      to={`/activities/`}
                       className={({ isActive }) =>
                         isActive
                           ? "navItemActive ml-[0.5rem]"
@@ -144,12 +172,26 @@ const MainLayout = () => {
                   </div>
 
                   {/* Nav Items */}
+                  {(user.privilege === 2 ||
+                    user.privilege === 1 ||
+                    user.privilege === 0) && (
+                    <NavLink
+                      to={`/dashboard`}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "navItemActive w-fit mt-[3rem]"
+                          : "navItem light:navItemLight mt-[3rem]"
+                      }
+                    >
+                      <Home />
+                    </NavLink>
+                  )}
                   <NavLink
-                    to={`/dashboard`}
+                    to={`/transactions`}
                     className={({ isActive }) =>
                       isActive
-                        ? "navItemActive w-fit mt-[3rem]"
-                        : "navItem light:navItemLight mt-[3rem]"
+                        ? "navItemActive w-fit"
+                        : "navItem light:navItemLight"
                     }
                   >
                     <NoteAltIcon />

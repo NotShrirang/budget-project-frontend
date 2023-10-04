@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./Transactions.module.css";
-import axios from "axios";
-import Config from "../../utils/config";
+import styles from "./TransactionsView.module.css";
 import { FormControl, IconButton, Paper } from "@mui/material";
 import Add from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { AddIcCallOutlined } from "@mui/icons-material";
 import { toast } from "react-toastify";
 
 const FormRow = ({
@@ -23,15 +20,6 @@ const FormRow = ({
   console.log(
     "InsideRow: " + content + ": " + index + " -> " + items + " " + quantity
   );
-  // useEffect(() => {
-  //   const accessToken = localStorage.getItem("accessToken");
-  //   if (accessToken === null) {
-  //     navigate("/login");
-  //   }
-  //   console.log("InsideRow: " + index + " -> " + content);
-  //   setItems(content[0]);
-  //   setQuantity(content[1]);
-  // }, [index]);
 
   const handleItemChange = (event) => {
     const newItem = event.target.value;

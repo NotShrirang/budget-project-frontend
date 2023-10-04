@@ -1,20 +1,22 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Box, IconButton } from "@mui/material";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import axios from "axios";
 import { toast } from "react-toastify";
+import DashboardCard from "../../components/Card/DashboardCard";
 import Config from "../../utils/config";
-import styles from "./Transactions.module.css";
-import DescriptionIcon from "@mui/icons-material/Description";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import PendingIcon from "@mui/icons-material/Pending";
-import StopCircleOutlinedIcon from "@mui/icons-material/StopCircleOutlined";
+import formatDate from "../../utils/formatDate";
 
-const TransactionView = () => {
+import styles from "./Transactions.module.css";
+import { Add } from "@mui/icons-material";
+
+const Transactions = () => {
   const navigate = useNavigate();
-  const [transaction, setTransaction] = useState({});
+  const [requests, setRequests] = useState([]);
+  const [requestCount, setRequestCount] = useState({});
   const [user, setUser] = useState({});
-  const { id } = useParams();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -22,43 +24,6 @@ const TransactionView = () => {
     if (!accessToken) {
       navigate("/login");
     }
-
-    axios
-      .get(Config.updateTransactionReadStatus + `${id}/`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((res) => {})
-      .catch((err) => {
-        console.log(err);
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 2000,
-          closeOnClick: true,
-          pauseOnHover: true,
-        });
-      });
-
-    axios
-      .get(Config.getRequests + `${id}/`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((res) => {
-        setTransaction(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 2000,
-          closeOnClick: true,
-          pauseOnHover: true,
-        });
-      });
-
     axios
       .get(Config.getUser + `/${userId}/`, {
         headers: {
@@ -77,282 +42,251 @@ const TransactionView = () => {
           pauseOnHover: true,
         });
       });
+
+    axios
+      .get(Config.getRequests, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        setRequests(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 2000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+      });
+
+    axios
+      .get(Config.getRequestCount, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        // console.log(res.data.data);
+        setRequestCount(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 2000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+      });
   }, []);
 
-  const handleUpdateButtonClick = () => {
-    navigate(`/transactions/${id}/update/`);
+  const handleRowDoubleClick = (e) => {
+    navigate(`/transactions/${e.row.id}/`);
   };
 
+  const handleEmailClick = (e) => {
+    window.open(`mailto:${e.target.innerText}`);
+  };
+
+  const handleAddButtonClick = () => {
+    navigate("/transactions/add");
+  };
+
+  const columns = [
+    {
+      field: "title",
+      headerName: "Title",
+      flex: 1,
+      renderCell: (params) => {
+        return <div className={styles.datagridCell}>{params.value}</div>;
+      },
+    },
+    {
+      field: "request_date",
+      headerName: "Request Date",
+      renderCell: (params) => {
+        return (
+          <div className={styles.datagridCell}>
+            {formatDate(params.value)[0]}
+          </div>
+        );
+      },
+    },
+    {
+      field: "userEmail",
+      headerName: "User Email",
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <button className={styles.button} onClick={handleEmailClick}>
+            {params.value}
+          </button>
+        );
+      },
+    },
+    {
+      field: "requested_amount",
+      headerName: "Requested Amount",
+      flex: 1,
+      renderCell: (params) => {
+        return <div className={styles.datagridCell}>{params.value}</div>;
+      },
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+      renderCell: (params) => {
+        if (params.value === "pending") {
+          return (
+            <div className={styles.pending}>
+              {params.value.toString().toUpperCase()}
+            </div>
+          );
+        } else if (params.value === "approved") {
+          return (
+            <div className={styles.approved}>
+              {params.value.toString().toUpperCase()}
+            </div>
+          );
+        } else if (params.value === "rejected") {
+          return (
+            <div className={styles.rejected}>
+              {params.value.toString().toUpperCase()}
+            </div>
+          );
+        } else {
+          return (
+            <div className={styles.datagridCell}>
+              {params.value.toString().toUpperCase()}
+            </div>
+          );
+        }
+      },
+    },
+  ];
+
+  if (user.privilege === 0 || user.privilege === 1) {
+    columns.push({
+      field: "departmentName",
+      headerName: "Department",
+      flex: 1,
+      editable: false,
+    });
+  }
+
   return (
-    <div
-      className="flex flex-col h-[91vh] mainContainer min-h-[91vh] light:mainContainerLight justify-start items-start 
-                    relative overflow-hidden p-[2rem]"
-    >
-      <div className="flex flex-col min-w-[100%]">
-        <div
-          style={{
-            display: "flex",
-            flex: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <div className="titleBlack">Transaction Details</div>
-          {user.privilege < 3 &&
-            (transaction.status == "requested" ||
-              transaction.status == "pending") && (
-              <div className="flex flex-row items-center">
-                <button
-                  className={styles.acceptedButton}
-                  onClick={() => {
-                    const confirm = window.confirm("Are you sure?");
-                    if (confirm) {
-                      axios
-                        .post(
-                          Config.updateTransactionStatus + `${id}/`,
-                          {
-                            status: "approved",
-                          },
-                          {
-                            headers: {
-                              Authorization: `Bearer ${localStorage.getItem(
-                                "accessToken"
-                              )}`,
-                            },
-                          }
-                        )
-                        .then((res) => {
-                          toast.success("Transaction Approved", {
-                            position: "top-right",
-                            autoClose: 2000,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                          });
-                          navigate("/dashboard");
-                        })
-                        .catch((err) => {
-                          console.log(err);
-                          toast.error(err.message, {
-                            position: "top-right",
-                            autoClose: 2000,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                          });
-                        });
-                    }
-                  }}
-                >
-                  Accept
-                </button>
-                <button
-                  className={styles.rejectedButton}
-                  onClick={() => {
-                    const confirm = window.confirm("Are you sure?");
-                    if (confirm) {
-                      axios
-                        .post(
-                          Config.updateTransactionStatus + `${id}/`,
-                          {
-                            status: "rejected",
-                          },
-                          {
-                            headers: {
-                              Authorization: `Bearer ${localStorage.getItem(
-                                "accessToken"
-                              )}`,
-                            },
-                          }
-                        )
-                        .then((res) => {
-                          toast.success("Transaction Rejected", {
-                            position: "top-right",
-                            autoClose: 2000,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                          });
-                        })
-                        .catch((err) => {
-                          console.log(err);
-                          toast.error(err.message, {
-                            position: "top-right",
-                            autoClose: 2000,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                          });
-                        });
-                    }
-                  }}
-                >
-                  Reject
-                </button>
-              </div>
-            )}
-          {!transaction.is_read && transaction.user == user.id && (
-            <button
+    <>
+      <div
+        className="flex flex-col w-[100%] h-[91vh] mainContainer light:mainContainerLight
+                    relative p-[2rem]"
+      >
+        <div className="flex flex-col">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <div className="titleBlack">Transactions</div>
+            <div
               className={styles.updateButton}
-              onClick={handleUpdateButtonClick}
-              disabled={transaction.is_read}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                alignItems: "center",
+                gap: "1rem",
+                zIndex: "10",
+              }}
+              onClick={handleAddButtonClick}
             >
-              Update
-            </button>
-          )}
+              <Add />
+              <div>Add</div>
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              transition: "all 0.5s ease",
+              height: "25vh",
+              marginTop: "2rem",
+            }}
+          >
+            <DashboardCard
+              title={"Pending Requests"}
+              value={requestCount.pending}
+            />
+            <DashboardCard
+              title={"Accepted Requests"}
+              value={requestCount.approved}
+            />
+            <DashboardCard
+              title={"Rejected Requests"}
+              value={requestCount.rejected}
+            />
+          </div>
+          <div className="mt-8 rounded-3xl min-h-[40vh]">
+            <Box
+              m="0 0 0 0"
+              sx={{
+                border: "2px solid #000",
+                borderRadius: "1.25rem",
+                width: "100%",
+                height: "100%",
+                "& .MuiDataGrid-root": {
+                  border: "black",
+                  fontFamily: "Epilogue",
+                },
+                "& .MuiDataGrid-cell": {
+                  borderBottom: "none",
+                },
+                "& .name-column--cell": {
+                  color: "white",
+                },
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: "#fff",
+                  borderBottom: "2px solid #000",
+                  fontWeight: "bold",
+                  borderRadius: "1.25rem",
+                },
+                "& .MuiDataGrid-virtualScroller": {
+                  backgroundColor: "#fff",
+                },
+                "& .MuiDataGrid-footerContainer": {
+                  borderTop: "none",
+                  backgroundColor: "#fff",
+                  borderRadius: "1.25rem",
+                },
+                "& .MuiCheckbox-root": {
+                  color: `#000 !important`,
+                },
+                "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                  color: `#fff !important`,
+                },
+              }}
+            >
+              <DataGrid
+                checkboxSelection
+                rows={requests}
+                columns={columns}
+                slots={{ Toolbar: GridToolbar }}
+                onRowDoubleClick={handleRowDoubleClick}
+                sx={{ borderRadius: "1.25rem", cursor: "pointer" }}
+              />
+            </Box>
+          </div>
         </div>
-        <div className="flex flex-col mt-[1rem] bg-[#D9D9D9] z-10 min-h-[73vh]">
-          <div
-            style={{
-              display: "flex",
-              direction: "row",
-              padding: "1rem",
-              justifyContent: "space-between",
-            }}
-          >
-            <div className="text-[3.125rem] font-medium">
-              {transaction.title}
-            </div>
-            <div className="text-[3.125rem] font-medium">
-              ₹{transaction.requested_amount}
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              direction: "row",
-              padding: "1rem",
-              justifyContent: "space-between",
-            }}
-          >
-            <div className="text-[1.25rem] font-medium">
-              {transaction.request_date?.split("T")[0]}
-            </div>
-            <div className="text-[1.25rem] font-medium">
-              By {transaction.userEmail}
-            </div>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              direction: "row",
-              padding: "1rem",
-              justifyContent: "space-between",
-            }}
-          >
-            {transaction.file && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  window.open(Config.baseURL + transaction.file, "_blank");
-                }}
-              >
-                <DescriptionIcon />
-                <div className="text-[1.5rem] font-medium hover:underline">
-                  File
-                </div>
-              </div>
-            )}
-            {transaction.status === "pending" && (
-              <div
-                style={{
-                  display: "flex",
-                  direction: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <PendingIcon className={styles.pending} />
-                <div className={styles.pending}>
-                  {transaction.status?.toUpperCase()}
-                </div>
-              </div>
-            )}
-            {transaction.status === "approved" && (
-              <div
-                style={{
-                  display: "flex",
-                  direction: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <CheckCircleOutlineIcon className={styles.approved} />
-                <div className={styles.approved}>
-                  {transaction.status?.toUpperCase()}
-                </div>
-              </div>
-            )}
-            {transaction.status === "rejected" && (
-              <div
-                style={{
-                  display: "flex",
-                  direction: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <StopCircleOutlinedIcon className={styles.rejected} />
-                <div className={styles.rejected}>
-                  {transaction.status?.toUpperCase()}
-                </div>
-              </div>
-            )}
-            {transaction.status === "requested" && (
-              <div
-                style={{
-                  display: "flex",
-                  direction: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <PendingIcon />
-                <div className="ml-[0.5rem]">
-                  {transaction.status?.toUpperCase()}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <hr className={styles.hr} />
-          <div
-            style={{
-              display: "flex",
-              direction: "row",
-              padding: "1rem",
-              justifyContent: "space-between",
-            }}
-          >
-            <div className="text-[1.5rem] font-medium">
-              Activity: {transaction.activityName}
-            </div>
-            <div className="text-[1.5rem] font-medium">
-              Department: {transaction.departmentName}
-            </div>
-          </div>
-          <div className="text-[1.5rem] font-medium ml-[1rem] mr-[1rem]">
-            Description
-          </div>
-          <div className="text-[1rem] font-normal ml-[1rem] mr-[1rem] mt-[0.5rem] mb-[0.8rem]">
-            {transaction.description}
-          </div>
-          {transaction.note && (
-            <>
-              <div className="text-[1.5rem] font-medium ml-[1rem] mr-[1rem]">
-                Note
-              </div>
-              <div className="text-[1rem] font-normal ml-[1rem] mr-[1rem] mt-[0.5rem] mb-[0.8rem]">
-                {transaction.note}
-              </div>
-            </>
-          )}
-        </div>
+        <div className="gradCircle -right-[0rem] -top-[20rem]"></div>
       </div>
-      <div className="gradCircle -right-[0rem] -top-[20rem]"></div>
-    </div>
+    </>
   );
 };
 
-export default TransactionView;
+export default Transactions;

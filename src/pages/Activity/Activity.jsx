@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import Config from "../../utils/config";
 import { Box } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { Add } from "@mui/icons-material";
+import styles from "./Activity.module.css";
 
 const Activity = () => {
   const [activities, setActivities] = useState([]);
@@ -60,6 +62,10 @@ const Activity = () => {
       });
   }, []);
 
+  const handleAddButtonClick = () => {
+    navigate("/activities/add");
+  };
+
   const columns = [
     {
       field: "name",
@@ -100,7 +106,32 @@ const Activity = () => {
                 relative overflow-hidden p-[2rem]"
     >
       <div className="flex flex-col w-[100%]">
-        <div className="titleBlack">Activities</div>
+        <div
+          style={{
+            display: "flex",
+            direction: "row",
+            padding: "1rem",
+            justifyContent: "space-between",
+            gap: "1rem",
+          }}
+        >
+          <div className="titleBlack">Activities</div>
+          <div
+            className={styles.updateButton}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              alignItems: "center",
+              gap: "1rem",
+              zIndex: "10",
+            }}
+            onClick={handleAddButtonClick}
+          >
+            <Add />
+            <div>Add</div>
+          </div>
+        </div>
         <div className="mt-8 rounded-3xl min-h-[40vh]">
           <Box
             m="0 0 0 0"

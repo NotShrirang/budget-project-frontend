@@ -3,12 +3,14 @@ import MainLayout from "./components/MainLayout/MainLayout";
 import Home from "./pages/Home/HomePage";
 import Login from "./pages/Login/LoginPage";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import PageNotFound from "./pages/PageNotFound/PageNotFound";
-import Activity from "./pages/Activity/Activity";
-import TransactionView from "./pages/Transactions/Transactions";
+import Transactions from "./pages/Transactions/Transactions";
+import TransactionView from "./pages/Transactions/TransactionsView";
 import TransactionAddForm from "./pages/Transactions/TransactionAddForm";
 import TransactionUpdateView from "./pages/Transactions/TransactionUpdatePage";
+import Activity from "./pages/Activity/Activity";
 import ActivityView from "./pages/Activity/ActivityView";
+import ActivityAddForm from "./pages/Activity/ActivityAddForm";
+import PageNotFound from "./pages/PageNotFound/PageNotFound";
 
 const router = createBrowserRouter([
   {
@@ -24,8 +26,12 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
-        path: "dashboard",
+        path: "dashboard/",
         element: <Dashboard />,
+      },
+      {
+        path: "transactions/",
+        element: <Transactions />,
       },
       {
         path: "transactions/add/",
@@ -42,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "activities",
         element: <Activity />,
+      },
+      {
+        path: "activities/add/",
+        element: <ActivityAddForm />,
       },
       {
         path: "activities/:id/",

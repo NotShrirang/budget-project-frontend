@@ -1,21 +1,16 @@
 import React from "react";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, IconButton } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import styles from "./Dashboard.module.css";
+import { useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
+import Config from "../../utils/config";
 import { toast } from "react-toastify";
 import DashboardCard from "../../components/Card/DashboardCard";
-import Config from "../../utils/config";
-import formatDate from "../../utils/formatDate";
-
-import styles from "./Dashboard.module.css";
-import { Add } from "@mui/icons-material";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-  const [requests, setRequests] = useState([]);
   const [requestCount, setRequestCount] = useState({});
+  const [requests, setRequests] = useState([]);
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -82,210 +77,47 @@ const Dashboard = () => {
         });
       });
   }, []);
-
-  const handleRowDoubleClick = (e) => {
-    navigate(`/transactions/${e.row.id}/`);
-  };
-
-  const handleEmailClick = (e) => {
-    window.open(`mailto:${e.target.innerText}`);
-  };
-
-  const handleAddButtonClick = () => {
-    navigate("/transactions/add");
-  };
-
-  const columns = [
-    {
-      field: "title",
-      headerName: "Title",
-      flex: 1,
-      renderCell: (params) => {
-        return <div className={styles.datagridCell}>{params.value}</div>;
-      },
-    },
-    {
-      field: "request_date",
-      headerName: "Request Date",
-      renderCell: (params) => {
-        return (
-          <div className={styles.datagridCell}>
-            {formatDate(params.value)[0]}
-          </div>
-        );
-      },
-    },
-    {
-      field: "userEmail",
-      headerName: "User Email",
-      flex: 1,
-      renderCell: (params) => {
-        return (
-          <button className={styles.button} onClick={handleEmailClick}>
-            {params.value}
-          </button>
-        );
-      },
-    },
-    {
-      field: "requested_amount",
-      headerName: "Requested Amount",
-      flex: 1,
-      renderCell: (params) => {
-        return <div className={styles.datagridCell}>{params.value}</div>;
-      },
-    },
-    {
-      field: "status",
-      headerName: "Status",
-      flex: 1,
-      renderCell: (params) => {
-        if (params.value === "pending") {
-          return (
-            <div className={styles.pending}>
-              {params.value.toString().toUpperCase()}
-            </div>
-          );
-        } else if (params.value === "approved") {
-          return (
-            <div className={styles.approved}>
-              {params.value.toString().toUpperCase()}
-            </div>
-          );
-        } else if (params.value === "rejected") {
-          return (
-            <div className={styles.rejected}>
-              {params.value.toString().toUpperCase()}
-            </div>
-          );
-        } else {
-          return (
-            <div className={styles.datagridCell}>
-              {params.value.toString().toUpperCase()}
-            </div>
-          );
-        }
-      },
-    },
-  ];
-
-  if (user.privilege === 0 || user.privilege === 1) {
-    columns.push({
-      field: "departmentName",
-      headerName: "Department",
-      flex: 1,
-      editable: false,
-    });
-  }
-
   return (
-    <>
-      <div
-        className="flex flex-col w-[100%] h-[91vh] mainContainer light:mainContainerLight
+    <div
+      className="flex flex-col w-[100%] h-[91vh] mainContainer light:mainContainerLight
                     relative p-[2rem]"
-      >
-        <div className="flex flex-col">
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <div className="titleBlack">Transactions</div>
-            <div
-              className={styles.updateButton}
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                alignItems: "center",
-                gap: "1rem",
-                zIndex: "10",
-              }}
-              onClick={handleAddButtonClick}
-            >
-              <Add />
-              <div>Add</div>
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              transition: "all 0.5s ease",
-              height: "25vh",
-              marginTop: "2rem",
-            }}
-          >
-            <DashboardCard
-              title={"Pending Requests"}
-              value={requestCount.pending}
-            />
-            <DashboardCard
-              title={"Accepted Requests"}
-              value={requestCount.approved}
-            />
-            <DashboardCard
-              title={"Rejected Requests"}
-              value={requestCount.rejected}
-            />
-          </div>
-          <div className="mt-8 rounded-3xl min-h-[40vh]">
-            <Box
-              m="0 0 0 0"
-              sx={{
-                border: "2px solid #000",
-                borderRadius: "1.25rem",
-                width: "100%",
-                height: "100%",
-                "& .MuiDataGrid-root": {
-                  border: "black",
-                  fontFamily: "Epilogue",
-                },
-                "& .MuiDataGrid-cell": {
-                  borderBottom: "none",
-                },
-                "& .name-column--cell": {
-                  color: "white",
-                },
-                "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: "#fff",
-                  borderBottom: "2px solid #000",
-                  fontWeight: "bold",
-                  borderRadius: "1.25rem",
-                },
-                "& .MuiDataGrid-virtualScroller": {
-                  backgroundColor: "#fff",
-                },
-                "& .MuiDataGrid-footerContainer": {
-                  borderTop: "none",
-                  backgroundColor: "#fff",
-                  borderRadius: "1.25rem",
-                },
-                "& .MuiCheckbox-root": {
-                  color: `#000 !important`,
-                },
-                "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                  color: `#fff !important`,
-                },
-              }}
-            >
-              <DataGrid
-                checkboxSelection
-                rows={requests}
-                columns={columns}
-                slots={{ Toolbar: GridToolbar }}
-                onRowDoubleClick={handleRowDoubleClick}
-                sx={{ borderRadius: "1.25rem", cursor: "pointer" }}
-              />
-            </Box>
-          </div>
+    >
+      <div className="flex flex-col">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <div className="titleBlack">Dashboard</div>
         </div>
-        <div className="gradCircle -right-[0rem] -top-[20rem]"></div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            transition: "all 0.5s ease",
+            height: "25vh",
+            marginTop: "2rem",
+          }}
+        >
+          <DashboardCard
+            title={"Pending Requests"}
+            value={requestCount.pending}
+          />
+          <DashboardCard
+            title={"Accepted Requests"}
+            value={requestCount.approved}
+          />
+          <DashboardCard
+            title={"Rejected Requests"}
+            value={requestCount.rejected}
+          />
+        </div>
       </div>
-    </>
+      <div className="gradCircle -bottom-[20rem]"></div>
+    </div>
   );
 };
 

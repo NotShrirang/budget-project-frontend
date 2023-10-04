@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import styles from "./Transactions.module.css";
+import styles from "./TransactionsView.module.css";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";

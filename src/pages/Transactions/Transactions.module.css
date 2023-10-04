@@ -1,8 +1,8 @@
-.hr {
-    background: linear-gradient(to right, #ff0000, transparent);
-    height: 3px;
-    margin-right: 1rem;
-    margin-left: 1rem;
+.datagridCell {
+    color: #000;
+    text-align: center;
+    font-family: Epilogue;
+    font-size: 1rem;
 }
 
 .pending {
@@ -11,7 +11,6 @@
     font-family: Epilogue;
     font-size: 1rem;
     font-weight: 600;
-    margin-left: 0.5rem;
 }
 
 .approved {
@@ -20,7 +19,6 @@
     font-family: Epilogue;
     font-size: 1rem;
     font-weight: 600;
-    margin-left: 0.5rem;
 }
 
 .rejected {
@@ -29,41 +27,27 @@
     font-family: Epilogue;
     font-size: 1rem;
     font-weight: 600;
-    margin-left: 0.5rem;
 }
 
-.acceptedButton {
-    z-index: 10;
-    background: #017f0d;
-    margin-right: 1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 0.2rem;
-    padding-bottom: 0.2rem;
+.button {
+    background-color: #000;
+    border: none;
+    color: white;
+    padding: 5px 10px;
     text-align: center;
-    font-size: 1.5rem;
-    border-radius: 10px;
+    text-decoration: none;
+    display: inline-block;
+    font-family: Epilogue;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 5px;
     transition: all 0.3s ease 0s;
-}
-.acceptedButton:hover {
-    background: #00ff00;
 }
 
-.rejectedButton {
-    z-index: 10;
-    background: #DA0C0C;
-    margin-right: 1rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    padding-top: 0.2rem;
-    padding-bottom: 0.2rem;
-    text-align: center;
-    font-size: 1.5rem;
-    border-radius: 10px;
-    transition: all 0.3s ease 0s;
-}
-.rejectedButton:hover {
-    background: #FF6161;
+.button:hover {
+    background-color: #ffffff;
+    color: #000;
+    cursor: pointer;
 }
 
 .updateButton {
