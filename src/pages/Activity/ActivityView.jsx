@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Config from "../../utils/config";
+import Swal from "sweetalert2";
 
 const ActivityView = () => {
   const navigate = useNavigate();
@@ -76,30 +77,53 @@ const ActivityView = () => {
               onSubmit={(e) => {
                 e.preventDefault();
                 const accessToken = localStorage.getItem("accessToken");
-                axios
-                  .put(Config.getActivities + `${id}/`, activity, {
-                    headers: {
-                      Authorization: `Bearer ${accessToken}`,
-                    },
-                  })
-                  .then((res) => {
-                    toast.success("Activity Updated Successfully!", {
-                      position: "top-right",
-                      autoClose: 2000,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                    });
-                    navigate("/activities");
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                    toast.error(err.message, {
-                      position: "top-right",
-                      autoClose: 2000,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                    });
-                  });
+                Swal.fire({
+                  title: "Do you want to update the activity?",
+                  text: "Adding activity will deduct amount from department's budget.",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonText: "Update",
+                  confirmButtonColor: "#DA0C0C",
+                  cancelButtonColor: "#000000",
+                  focusCancel: true,
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    const accessToken = localStorage.getItem("accessToken");
+                    const userId = localStorage.getItem("userId");
+                    if (!accessToken) {
+                      navigate("/login");
+                    }
+                    activity.available_amount = parseInt(
+                      activity.available_amount
+                    );
+                    activity.total_amount = parseInt(activity.total_amount);
+                    axios
+                      .put(Config.getActivities + `${id}/`, activity, {
+                        headers: {
+                          Authorization: `Bearer ${accessToken}`,
+                        },
+                      })
+                      .then((res) => {
+                        toast.success("Activity Updated Successfully!", {
+                          position: "top-right",
+                          autoClose: 2000,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                        });
+                        Swal.fire("Updated successfully!", "", "success");
+                        navigate("/activities");
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                        toast.error(err.message, {
+                          position: "top-right",
+                          autoClose: 2000,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                        });
+                      });
+                  }
+                });
               }}
             >
               <div className="inputLight light:inputLight">

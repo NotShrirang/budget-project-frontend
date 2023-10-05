@@ -11,6 +11,9 @@ import Activity from "./pages/Activity/Activity";
 import ActivityView from "./pages/Activity/ActivityView";
 import ActivityAddForm from "./pages/Activity/ActivityAddForm";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
+import Department from "./pages/Department/Departments";
+import DepartmentAddForm from "./pages/Department/DepartmentsAddForm";
+import DepartmentUpdateForm from "./pages/Department/DepartmentsUpdateForm";
 
 const router = createBrowserRouter([
   {
@@ -46,7 +49,19 @@ const router = createBrowserRouter([
         element: <TransactionUpdateView />,
       },
       {
-        path: "activities",
+        path: "departments/",
+        element: <Department />,
+      },
+      {
+        path: "departments/add/",
+        element: <DepartmentAddForm />,
+      },
+      {
+        path: "departments/:id/",
+        element: <DepartmentUpdateForm />,
+      },
+      {
+        path: "activities/",
         element: <Activity />,
       },
       {

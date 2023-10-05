@@ -7,6 +7,7 @@ import Config from "../../utils/config";
 import mmcoeLogo from "../../assets/logo.webp";
 import styles from "./MainLayout.module.css";
 import NoteAltIcon from "@mui/icons-material/NoteAlt";
+import VillaOutlinedIcon from "@mui/icons-material/VillaOutlined";
 import RowingIcon from "@mui/icons-material/Rowing";
 import TextsmsIcon from "@mui/icons-material/Textsms";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -132,6 +133,19 @@ const MainLayout = () => {
                     <NoteAltIcon />
                     <div>Transactions</div>
                   </NavLink>
+                  {(user.privilege === 1 || user.privilege === 0) && (
+                    <NavLink
+                      to={`/departments/`}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "navItemActive ml-[0.5rem]"
+                          : "navItem light:navItemLight ml-[0.5rem]"
+                      }
+                    >
+                      <VillaOutlinedIcon />
+                      <div>Departments</div>
+                    </NavLink>
+                  )}
                   {(user.privilege === 2 ||
                     user.privilege === 1 ||
                     user.privilege === 0) && (
@@ -196,6 +210,18 @@ const MainLayout = () => {
                   >
                     <NoteAltIcon />
                   </NavLink>
+                  {(user.privilege === 1 || user.privilege === 0) && (
+                    <NavLink
+                      to={`/departments`}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "navItemActive w-fit"
+                          : "navItem light:navItemLight"
+                      }
+                    >
+                      <VillaOutlinedIcon />
+                    </NavLink>
+                  )}
                   {(user.privilege === 2 ||
                     user.privilege === 1 ||
                     user.privilege === 0) && (

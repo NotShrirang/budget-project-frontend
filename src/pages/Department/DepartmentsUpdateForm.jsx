@@ -6,10 +6,10 @@ import { toast } from "react-toastify";
 import Config from "../../utils/config";
 import Swal from "sweetalert2";
 
-const ActivityAddForm = () => {
+const DepartmentUpdateForm = () => {
   const navigate = useNavigate();
-  const [activity, setActivity] = useState({});
-  const [departments, setDepartments] = useState([]);
+  const [department, setDepartment] = useState([]);
+  const [user, setUser] = useState({});
   const { id } = useParams();
 
   useEffect(() => {
@@ -20,13 +20,38 @@ const ActivityAddForm = () => {
     }
 
     axios
-      .get(Config.getDepartments, {
+      .get(Config.getUser + `/${userId}/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       })
       .then((res) => {
-        setDepartments(res.data.data);
+        setUser(res.data);
+        if (res.data.privilege === 3) {
+          navigate("/transactions");
+        }
+        if (res.data.privilege === 2) {
+          navigate("/dashboard");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 2000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+      });
+
+    axios
+      .get(Config.getDepartments + `${id}/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        setDepartment(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -45,7 +70,7 @@ const ActivityAddForm = () => {
                 relative overflow-hidden p-[2rem]"
     >
       <div className="flex flex-col w-[100%]">
-        <div className="titleBlack">Add Activity</div>
+        <div className="titleBlack">Department Details</div>
         <div className="flex flex-col mt-[1rem] z-10 min-h-[73vh]">
           <div
             style={{
@@ -59,12 +84,13 @@ const ActivityAddForm = () => {
               className="flex flex-col gap-[1rem]"
               onSubmit={(e) => {
                 e.preventDefault();
+                const accessToken = localStorage.getItem("accessToken");
                 Swal.fire({
-                  title: "Do you want to add the activity?",
-                  text: "Adding activity will deduct amount from department's budget.",
+                  title: "Do you want to update this department?",
+                  text: "You cannot undo this action! Please make sure the information is correct.",
                   icon: "warning",
                   showCancelButton: true,
-                  confirmButtonText: "Add",
+                  confirmButtonText: "Update",
                   confirmButtonColor: "#DA0C0C",
                   cancelButtonColor: "#000000",
                   focusCancel: true,
@@ -75,25 +101,25 @@ const ActivityAddForm = () => {
                     if (!accessToken) {
                       navigate("/login");
                     }
-                    activity.available_amount = parseInt(
-                      activity.available_amount
+                    department.available_amount = parseInt(
+                      department.available_amount
                     );
-                    activity.total_amount = parseInt(activity.total_amount);
+                    department.total_amount = parseInt(department.total_amount);
                     axios
-                      .post(Config.getActivities, activity, {
+                      .put(Config.getDepartments + `${id}/`, department, {
                         headers: {
                           Authorization: `Bearer ${accessToken}`,
                         },
                       })
                       .then((res) => {
-                        toast.success("Activity Added Successfully!", {
+                        toast.success("Department Updated Successfully!", {
                           position: "top-right",
                           autoClose: 2000,
                           closeOnClick: true,
                           pauseOnHover: true,
                         });
-                        Swal.fire("Added successfully!", "", "success");
-                        navigate("/activities");
+                        Swal.fire("Updated successfully!", "", "success");
+                        navigate("/departments");
                       })
                       .catch((err) => {
                         console.log(err);
@@ -113,38 +139,22 @@ const ActivityAddForm = () => {
                 <input
                   type="text"
                   name="m"
-                  value={activity.name}
+                  value={department.name}
                   onChange={(e) => {
-                    setActivity({ ...activity, name: e.target.value });
+                    setDepartment({ ...department, name: e.target.value });
                   }}
-                  placeholder="Enter activity name"
+                  placeholder="Enter department name"
                 />
-              </div>
-              <div className="inputLight light:inputLight">
-                <label>Department</label>
-                <select
-                  className="inputLight light:inputLight"
-                  onChange={(e) => {
-                    setActivity({ ...activity, department: e.target.value });
-                  }}
-                  value={activity.department}
-                >
-                  {departments.map((dept) => (
-                    <option value={dept.id} key={dept.id}>
-                      {dept.name}
-                    </option>
-                  ))}
-                </select>
               </div>
               <div className="inputLight light:inputLight">
                 <label>Available Amount</label>
                 <input
-                  type="number"
+                  type="text"
                   name="m"
-                  value={activity.available_amount}
+                  value={department.available_amount}
                   onChange={(e) => {
-                    setActivity({
-                      ...activity,
+                    setDepartment({
+                      ...department,
                       available_amount: e.target.value,
                     });
                   }}
@@ -154,12 +164,12 @@ const ActivityAddForm = () => {
               <div className="inputLight light:inputLight">
                 <label>Total Amount</label>
                 <input
-                  type="number"
+                  type="text"
                   name="m"
-                  value={activity.total_amount}
+                  value={department.total_amount}
                   onChange={(e) => {
-                    setActivity({
-                      ...activity,
+                    setDepartment({
+                      ...department,
                       total_amount: e.target.value,
                     });
                   }}
@@ -171,7 +181,7 @@ const ActivityAddForm = () => {
                 type="submit"
                 className="primaryButton light:primaryButtonlight mt-[2rem] px-[3rem] py-[0.7rem]"
               >
-                Add
+                Update
               </button>
             </form>
           </div>
@@ -181,4 +191,4 @@ const ActivityAddForm = () => {
   );
 };
 
-export default ActivityAddForm;
+export default DepartmentUpdateForm;
