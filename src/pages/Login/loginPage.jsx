@@ -1,9 +1,6 @@
 import { useState } from "react";
-import ClipLoader from "react-spinners/ClipLoader";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import Loader from "../../components/Loader/Loader";
 import Config from "../../utils/config";
 import jwtDecode from "jwt-decode";
 import { useEffect } from "react";
