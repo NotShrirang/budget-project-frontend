@@ -4,10 +4,16 @@
     background-color: #ffffff;
     border-radius: 0.5rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    margin: 1rem;
     padding: 1rem;
     width: 100%;
     text-align: center;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
 .departmentTitle {
@@ -18,4 +24,12 @@
     text-transform: uppercase;
     color: #000000;
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.departmentText {
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #000000;
 }
