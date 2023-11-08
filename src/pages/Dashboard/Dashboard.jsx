@@ -189,22 +189,42 @@ const Dashboard = () => {
                   >
                     {department.department}
                   </div>
-                  <Plot
-                    data={data}
-                    layout={{
-                      width:
-                        (window.innerWidth / requestByActivity.length) * 0.85,
-                      height:
-                        (window.innerWidth / requestByActivity.length) * 0.9,
-                      showlegend: false,
-                      margin: {
-                        l: 20,
-                        r: 20,
-                        b: 20,
-                        t: 20,
-                      },
-                    }}
-                  />
+                  {user.privilege === 1 && (
+                    <Plot
+                      data={data}
+                      layout={{
+                        width:
+                          (window.innerWidth / requestByActivity.length) * 0.85,
+                        height:
+                          (window.innerWidth / requestByActivity.length) * 0.7,
+                        showlegend: false,
+                        margin: {
+                          l: 20,
+                          r: 20,
+                          b: 20,
+                          t: 20,
+                        },
+                      }}
+                    />
+                  )}
+                  {user.privilege === 2 && (
+                    <Plot
+                      data={data}
+                      layout={{
+                        width:
+                          (window.innerWidth / requestByActivity.length) * 0.2,
+                        height:
+                          (window.innerWidth / requestByActivity.length) * 0.15,
+                        showlegend: false,
+                        margin: {
+                          l: 20,
+                          r: 20,
+                          b: 20,
+                          t: 20,
+                        },
+                      }}
+                    />
+                  )}
                 </div>
               );
             })}

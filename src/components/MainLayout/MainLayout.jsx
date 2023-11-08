@@ -43,7 +43,59 @@ const MainLayout = () => {
         setUser(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.message);
+        if (err.message === "Request failed with status code 401") {
+          try {
+            const refreshToken = localStorage.getItem("refreshToken");
+            const response = fetch(Config.refreshToken, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                refresh: refreshToken,
+              }),
+            });
+
+            const data = response.then((res) => {
+              console.log(res);
+              return res.json();
+            });
+            console.log(data);
+            if (data.access) {
+              var decoded = jwtDecode(data.access);
+              const userId = decoded.user_id;
+              localStorage.setItem("refreshToken", data.refresh);
+              localStorage.setItem("accessToken", data.access);
+              localStorage.setItem("userId", userId);
+              navigate("/dashboard");
+              toast.success("Login Successful", {
+                position: "top-right",
+                autoClose: 2000,
+                closeOnClick: true,
+                pauseOnHover: true,
+              });
+            } else if (
+              data.detail ===
+              "No active account found with the given credentials"
+            ) {
+              toast.error("Invalid Credentials", {
+                position: "top-right",
+                autoClose: 2000,
+                closeOnClick: true,
+                pauseOnHover: true,
+              });
+            }
+          } catch (error) {
+            console.log(error);
+            toast.error("Something went wrong...", {
+              position: "top-right",
+              autoClose: 2000,
+              closeOnClick: true,
+              pauseOnHover: true,
+            });
+          }
+        }
         toast.error(err.message, {
           position: "top-right",
           autoClose: 2000,
@@ -126,8 +178,8 @@ const MainLayout = () => {
                     to={`/transactions/`}
                     className={({ isActive }) =>
                       isActive
-                        ? "navItemActive ml-[0.5rem]"
-                        : "navItem light:navItemLight ml-[0.5rem]"
+                        ? "navItemActive ml-[0.5rem] mt-[3rem] "
+                        : "navItem light:navItemLight ml-[0.5rem] mt-[3rem]"
                     }
                   >
                     <NoteAltIcon />
@@ -204,8 +256,8 @@ const MainLayout = () => {
                     to={`/transactions`}
                     className={({ isActive }) =>
                       isActive
-                        ? "navItemActive w-fit"
-                        : "navItem light:navItemLight"
+                        ? "navItemActive w-fit mt-[3rem]"
+                        : "navItem light:navItemLight mt-[3rem]"
                     }
                   >
                     <NoteAltIcon />

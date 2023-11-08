@@ -183,6 +183,70 @@ const DepartmentUpdateForm = () => {
               >
                 Update
               </button>
+              {user.privilege === 1 && (
+                <button
+                  type="button"
+                  className="primaryButton light:primaryButton mt-[2rem] px-[3rem] py-[0.7rem]"
+                  onClick={() => {
+                    Swal.fire({
+                      title: "Do you want to delete this department?",
+                      text: "You cannot undo this action! Please make sure you are deleting the correct department.",
+                      icon: "warning",
+                      input: "text",
+                      inputPlaceholder:
+                        "Type in the name of the department to confirm deletion.",
+                      showCancelButton: true,
+                      confirmButtonText: "Delete",
+                      confirmButtonColor: "#DA0C0C",
+                      cancelButtonColor: "#000000",
+                      focusCancel: true,
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        if (result.value !== department.name) {
+                          Swal.fire(
+                            "Incorrect department name!",
+                            "Please make sure you are deleting the correct department.",
+                            "error"
+                          );
+                          return;
+                        }
+                        const accessToken = localStorage.getItem("accessToken");
+                        const userId = localStorage.getItem("userId");
+                        if (!accessToken) {
+                          navigate("/login");
+                        }
+                        axios
+                          .delete(Config.getDepartments + `${id}/`, {
+                            headers: {
+                              Authorization: `Bearer ${accessToken}`,
+                            },
+                          })
+                          .then((res) => {
+                            toast.success("Department Deleted Successfully!", {
+                              position: "top-right",
+                              autoClose: 2000,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                            });
+                            Swal.fire("Deleted successfully!", "", "success");
+                            navigate("/departments");
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                            toast.error(err.message, {
+                              position: "top-right",
+                              autoClose: 2000,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                            });
+                          });
+                      }
+                    });
+                  }}
+                >
+                  Delete
+                </button>
+              )}
             </form>
           </div>
         </div>

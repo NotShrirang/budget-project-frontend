@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 const ActivityView = () => {
   const navigate = useNavigate();
   const [activity, setActivity] = useState({});
+  const [user, setUser] = useState({});
   const [departments, setDepartments] = useState([]);
   const { id } = useParams();
 
@@ -18,6 +19,28 @@ const ActivityView = () => {
     if (!accessToken) {
       navigate("/login");
     }
+    axios
+      .get(Config.getUser + `/${userId}/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        setUser(res.data);
+        if (res.data.privilege === 3) {
+          navigate("/transactions");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 2000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+      });
+
     axios
       .get(Config.getActivities + `${id}/`, {
         headers: {
@@ -191,6 +214,70 @@ const ActivityView = () => {
               >
                 Update
               </button>
+              {user.privilege === 1 && (
+                <button
+                  type="button"
+                  className="primaryButton light:primaryButton mt-[2rem] px-[3rem] py-[0.7rem]"
+                  onClick={() => {
+                    const accessToken = localStorage.getItem("accessToken");
+                    Swal.fire({
+                      title: "Do you want to delete the activity?",
+                      text: "Deleting activity will deduct amount from department's budget.",
+                      icon: "warning",
+                      input: "text",
+                      inputPlaceholder: "Enter activity name to confirm...",
+                      showCancelButton: true,
+                      confirmButtonText: "Delete",
+                      confirmButtonColor: "#DA0C0C",
+                      cancelButtonColor: "#000000",
+                      focusCancel: true,
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        if (result.value !== activity.name) {
+                          Swal.fire(
+                            "Incorrect activity name!",
+                            "Please make sure you are deleting the correct activity.",
+                            "error"
+                          );
+                          return;
+                        }
+                        const accessToken = localStorage.getItem("accessToken");
+                        const userId = localStorage.getItem("userId");
+                        if (!accessToken) {
+                          navigate("/login");
+                        }
+                        axios
+                          .delete(Config.getActivities + `${id}/`, {
+                            headers: {
+                              Authorization: `Bearer ${accessToken}`,
+                            },
+                          })
+                          .then((res) => {
+                            toast.success("Activity Deleted Successfully!", {
+                              position: "top-right",
+                              autoClose: 2000,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                            });
+                            Swal.fire("Deleted successfully!", "", "success");
+                            navigate("/activities");
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                            toast.error(err.message, {
+                              position: "top-right",
+                              autoClose: 2000,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                            });
+                          });
+                      }
+                    });
+                  }}
+                >
+                  Delete
+                </button>
+              )}
             </form>
           </div>
         </div>
