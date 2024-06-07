@@ -2,7 +2,7 @@
 
 This is frontend for the project
 <br>
-Backend - https://github.com/atharvabhide/budget-project-backend
+Backend - https://github.com/NotShrirang/budget-project-backend
 
 Clone the project-
 
